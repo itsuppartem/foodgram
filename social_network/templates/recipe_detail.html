@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recipe.title }} - Foodgram{% endblock %}
+
+{% block content %}
+<div class="recipe-detail animate__animated animate__fadeIn">
+    <div class="row">
+        <div class="col-12 col-md-6 mb-4">
+            {% if recipe.image %}
+            <img src="{{ recipe.image.url }}" class="img-fluid rounded" alt="{{ recipe.title }}"
+                 style="width: 100%; height: 400px; object-fit: cover;">
+            {% endif %}
+        </div>
+        <div class="col-12 col-md-6">
+            <h1 class="mb-3">{{ recipe.name }}</h1>
+            <div class="d-flex align-items-center mb-3">
+                <span class="text-muted me-2">Автор:</span>
+                <span class="fw-bold me-3">{{ recipe.author.username }}</span>
+                {% if user.is_authenticated and user != recipe.author %}
+                {% if is_subscribed %}
+                <form method="post" action="{% url 'unsubscribe' recipe.author.username %}?recipe_id={{ recipe.id }}"
+                      class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm ms-2">Отписаться</button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'subscribe' recipe.author.username %}?recipe_id={{ recipe.id }}"
+                      class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success btn-sm ms-2">Подписаться</button>
+                </form>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <span class="badge bg-primary me-2">{{ recipe.cooking_time }} мин</span>
+                {% for tag in recipe.tags.all %}
+                <span class="badge bg-success me-2">{{ tag.name }}</span>
+                {% endfor %}
+                <span class="badge bg-info me-2"><i class="fas fa-eye"></i> Просмотры: {{ recipe.views_count }}</span>
+                <span class="badge bg-danger me-2"><i class="fas fa-heart"></i> Избранное: {{ recipe.favorites_count }}</span>
+            </div>
+            <div class="mb-3">
+                <small class="text-muted">
+                    <i class="fas fa-calendar-plus"></i> Создан: {{ recipe.created_at|date:"d.m.Y H:i" }}
+                    {% if recipe.updated_at != recipe.created_at %}
+                    <br>
+                    <i class="fas fa-calendar-edit"></i> Обновлен: {{ recipe.updated_at|date:"d.m.Y H:i" }}
+                    {% endif %}
+                </small>
+            </div>
+            <p class="lead">{{ recipe.text }}</p>
+
+            {% if user.is_authenticated %}
+            <div class="btn-group mb-4">
+                {% if user == recipe.author %}
+                <a href="{% url 'recipe_edit' recipe.id %}" class="btn btn-outline-primary">
+                    <i class="fas fa-edit"></i> Редактировать
+                </a>
+                <form method="post" action="{% url 'recipe_delete' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger"
+                            onclick="return confirm('Вы уверены, что хотите удалить этот рецепт?')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                </form>
+                {% endif %}
+                {% if is_favorited %}
+                <form method="post" action="{% url 'favorite_remove' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="fas fa-heart-broken"></i> Убрать из избранного
+                    </button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'favorite_add' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-heart"></i> В избранное
+                    </button>
+                </form>
+                {% endif %}
+                {% if is_in_shopping_cart %}
+                <form method="post" action="{% url 'shopping_list_remove' recipe.id %}?from_detail=1" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="fas fa-shopping-cart"></i> Удалить из списка покупок
+                    </button>
+                </form>
+                {% else %}
+                <form method="post" action="{% url 'shopping_list_add' recipe.id %}?from_detail=1" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fas fa-shopping-cart"></i> В список покупок
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">Ингредиенты</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for ing in recipe.ingredients_amount.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ ing.ingredient.name }}
+                            <span class="badge bg-primary rounded-pill">
+                                {{ ing.amount }} {{ ing.ingredient.measurement_unit }}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">Шаги приготовления</h3>
+                </div>
+                <div class="card-body">
+                    {% if recipe.steps %}
+                    <ol class="list-group list-group-numbered">
+                        {% for step in recipe.steps %}
+                        <li class="list-group-item">{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                    {% else %}
+                    <div class="alert alert-info">Шаги приготовления не указаны</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-comments card mt-4">
+        <div class="card-header">
+            <h3 class="mb-0">Комментарии</h3>
+        </div>
+        <div class="card-body">
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_comment' recipe.id %}" class="comment-form mb-4">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="text" class="form-control" placeholder="Оставьте комментарий..."
+                              required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">
+                    <i class="fas fa-paper-plane"></i> Отправить
+                </button>
+            </form>
+            {% endif %}
+
+            <div class="comments-list">
+                {% for comment in recipe.comments.all %}
+                <div class="comment card mb-3">
+                    <div class="card-body">
+                        <div class="comment-header d-flex justify-content-between align-items-center mb-2">
+                            <span class="comment-author fw-bold">{{ comment.author.username }}</span>
+                            <span class="comment-date text-muted small">
+                                <i class="fas fa-clock"></i> {{ comment.created|date:"d.m.Y H:i" }}
+                            </span>
+                        </div>
+                        <div class="comment-text">{{ comment.text }}</div>
+                        {% if user == comment.author %}
+                        <form method="post" action="{% url 'delete_comment' recipe.id comment.id %}"
+                              class="delete-comment-form mt-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Пока нет комментариев
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .recipe-detail {
+        padding: 20px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 15px;
+        margin-bottom: 5px;
+        background-color: var(--bg-color);
+        border-radius: 10px !important;
+        transition: all 0.3s;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+        transform: translateX(5px);
+    }
+
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .recipe-detail {
+            padding: 10px;
+        }
+
+        .btn-group {
+            flex-direction: column;
+        }
+
+        .btn-group .btn {
+            width: 100%;
+        }
+    }
+
+    .recipe-comments {
+        background: var(--bg-color);
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .comment-form textarea {
+        min-height: 100px;
+        resize: vertical;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+    .comment-form textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+    .comment {
+        background: #fff;
+        border: none;
+        transition: transform 0.2s;
+    }
+
+    .comment:hover {
+        transform: translateX(5px);
+    }
+
+    .comment-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+    }
+
+    .comment-text {
+        color: #333;
+        line-height: 1.5;
+    }
+
+    .delete-comment-form {
+        text-align: right;
+    }
+
+    @media (max-width: 768px) {
+        .comment-header {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .comment-date {
+            margin-top: 5px;
+        }
+    }
+</style>
+{% endblock %}
+{% endblock %} 

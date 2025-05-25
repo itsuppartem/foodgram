@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}Рецепты{% endblock %}
+
+{% block content %}
+<div class="recipe-list">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Поиск рецептов...">
+                <button class="btn btn-primary" type="button" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="recipeList">
+        {% for recipe in recipes %}
+        <div class="col-12 col-md-6 col-lg-4 mb-4 animate__animated animate__fadeIn">
+            <div class="card h-100">
+                {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}"
+                     style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <p class="card-text text-muted">
+                        <small>Автор: {{ recipe.author.username }}</small>
+                        <br>
+                        <small><i class="fas fa-calendar-plus"></i> {{ recipe.created_at|date:"d.m.Y H:i" }}</small>
+                    </p>
+                    <p class="card-text">{{ recipe.text|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary">{{ recipe.cooking_time }} мин</span>
+                            <span class="badge bg-info"><i
+                                    class="fas fa-eye"></i> Просмотры: {{ recipe.views_count }}</span>
+                            <span class="badge bg-danger"><i class="fas fa-heart"></i> Избранное: {{ recipe.favorites_count }}</span>
+                        </div>
+                        <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .recipe-list {
+        padding: 20px;
+    }
+
+    .input-group {
+        box-shadow: var(--card-shadow);
+        border-radius: 25px;
+        overflow: hidden;
+    }
+
+    .input-group .form-control {
+        border: none;
+        padding: 15px 20px;
+    }
+
+    .input-group .btn {
+        padding: 15px 25px;
+        border: none;
+    }
+
+    @media (max-width: 768px) {
+        .recipe-list {
+            padding: 5px;
+        }
+
+        .input-group .form-control,
+        .input-group .btn {
+            padding: 8px 12px;
+        }
+
+        .card {
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        let searchTimeout;
+
+        function performSearch() {
+            const searchText = $('#searchInput').val();
+            $.ajax({
+                url: window.location.pathname,
+                data: { search: searchText },
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(data) {
+                    $('#recipeList').html(data.html);
+                }
+            });
+        }
+
+        $('#searchInput').on('keyup', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, 500);
+        });
+
+        $('#searchButton').click(function() {
+            performSearch();
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

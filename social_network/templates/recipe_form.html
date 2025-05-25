@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.id %}Редактирование рецепта{% else %}Создание рецепта{% endif %}{% endblock %}
+
+{% block content %}
+<div class="recipe-form-page animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">{% if form.instance.id %}Редактирование рецепта{% else %}Создание рецепта{% endif
+                        %}</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="recipeForm">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Название</label>
+                            {{ form.name.errors }}
+                            <div class="input-group">
+                                {{ form.name }}
+                                <button type="button" class="btn btn-outline-primary" id="generateRecipe">
+                                    <i class="fas fa-magic"></i> Сгенерировать через AI
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.text.id_for_label }}" class="form-label">Описание</label>
+                            {{ form.text.errors }}
+                            {{ form.text }}
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label for="{{ form.cooking_time.id_for_label }}" class="form-label">Время приготовления
+                                    (мин)</label>
+                                {{ form.cooking_time.errors }}
+                                {{ form.cooking_time }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label for="{{ form.difficulty.id_for_label }}" class="form-label">Сложность</label>
+                                {{ form.difficulty.errors }}
+                                {{ form.difficulty }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="{{ form.image.id_for_label }}" class="form-label">Фото блюда</label>
+                            {{ form.image.errors }}
+                            {{ form.image }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Теги</label>
+                            {{ form.tags.errors }}
+                            <div class="tag-list">
+                                {% for tag in form.tags %}
+                                <div class="form-check form-check-inline">
+                                    {{ tag }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Ингредиенты</label>
+                            <div id="ingredients">
+                                <div class="ingredient-item mb-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-5">
+                                            <select name="ingredient" class="form-control" required>
+                                                <option value="">Выберите ингредиент</option>
+                                                {% for ingredient in ingredients %}
+                                                <option value="{{ ingredient.id }}"
+                                                        data-unit="{{ ingredient.measurement_unit }}">{{ ingredient.name
+                                                    }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <input type="number" name="amount" class="form-control"
+                                                   value="${ingredient.amount}" required min="0" step="any">
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <input type="text" class="form-control unit-input" placeholder="" readonly>
+                                        </div>
+                                        <div class="col-12 col-md-1">
+                                            <button type="button" class="btn btn-danger remove-ingredient">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary" id="addIngredient">
+                                <i class="fas fa-plus"></i> Добавить ингредиент
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_steps" class="form-label">Шаги приготовления</label>
+                            <textarea name="steps" id="id_steps" class="form-control" rows="6"
+                                      placeholder="Каждый шаг с новой строки">{% if form.instance.steps %}{{ form.instance.steps|join:'\n' }}{% endif %}</textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                {% if form.instance.id %}Сохранить изменения{% else %}Создать рецепт{% endif %}
+                            </button>
+                            <a href="{% url 'recipe_list' %}" class="btn btn-outline-secondary">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .recipe-form-page {
+        padding: 20px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px 20px;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(76,175,80,0.25);
+    }
+
+    .input-group .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        padding: 12px 20px;
+    }
+
+    .input-group .form-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-check-inline {
+        margin-right: 15px;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .ingredient-item {
+        background-color: var(--bg-color);
+        padding: 15px;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    .ingredient-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .btn {
+        font-weight: 500;
+    }
+
+    .remove-ingredient {
+        padding: 8px;
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .recipe-form-page {
+            padding: 5px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .ingredient-item .row {
+            gap: 5px;
+            margin: 0;
+        }
+
+        .ingredient-item .col-12 {
+            margin-bottom: 5px;
+            padding: 0 5px;
+        }
+
+        .form-control {
+            padding: 12px;
+            font-size: 16px;
+            -webkit-appearance: none;
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            font-size: 16px;
+        }
+
+        select.form-control {
+            background-image: none;
+            padding-right: 12px;
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 16px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .form-label {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+
+        .input-group .btn {
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .card {
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ingredientsContainer = document.getElementById('ingredients');
+        const generateButton = document.getElementById('generateRecipe');
+        const nameInput = document.querySelector('input[name="name"]');
+        const textInput = document.querySelector('textarea[name="text"]');
+        const cookingTimeInput = document.querySelector('input[name="cooking_time"]');
+        const difficultySelect = document.querySelector('select[name="difficulty"]');
+
+        generateButton.addEventListener('click', async function() {
+            if (!nameInput.value) {
+                alert('Введите название рецепта для генерации');
+                return;
+            }
+
+            if (generateButton.disabled) {
+                return;
+            }
+
+            generateButton.disabled = true;
+            generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерация...';
+
+            try {
+                const response = await fetch('/api/recipes/generate-by-text/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        prompt: nameInput.value,
+                        cooking_time: cookingTimeInput.value || 30,
+                        difficulty: difficultySelect.value || 'medium'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка генерации рецепта');
+                }
+
+                const data = await response.json();
+
+                // Заполняем поля формы
+                nameInput.value = data.name || nameInput.value;
+                textInput.value = data.description;
+                cookingTimeInput.value = data.cooking_time;
+
+                // Устанавливаем сложность
+                if (data.difficulty) {
+                    const difficultyValue = data.difficulty.toLowerCase();
+                    if (['easy', 'medium', 'hard'].includes(difficultyValue)) {
+                        difficultySelect.value = difficultyValue;
+                    }
+                }
+
+                // Заполняем шаги, если есть
+                if (data.steps && Array.isArray(data.steps)) {
+                    document.getElementById('id_steps').value = data.steps.join('\n');
+                }
+
+                // Генерация картинки, если есть prompt
+                if (data.image_generation_prompt) {
+                    try {
+                        console.log('Начинаем генерацию картинки с промптом:', data.image_generation_prompt);
+                        const imageResponse = await fetch('/api/recipes/generate-image/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({
+                                prompt: data.image_generation_prompt
+                            })
+                        });
+
+                        console.log('Ответ от сервера:', imageResponse.status);
+                        if (imageResponse.ok) {
+                            const imageBlob = await imageResponse.blob();
+                            console.log('Получен blob:', imageBlob.size, 'байт');
+                            const imageFile = new File([imageBlob], 'generated_image.png', { type: 'image/png' });
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(imageFile);
+                            const imageInput = document.querySelector('input[name="image"]');
+                            imageInput.files = dataTransfer.files;
+                            console.log('Файл установлен в input:', imageInput.files[0]);
+                        } else {
+                            console.error('Ошибка генерации картинки:', await imageResponse.text());
+                        }
+                    } catch (error) {
+                        console.error('Ошибка генерации картинки:', error);
+                    }
+                }
+
+                // Асинхронная проверка и создание ингредиента
+                async function ensureIngredientExists(name, unit) {
+                    // Поиск по name и unit в option
+                    const selectOptions = Array.from(document.querySelectorAll('select[name="ingredient"] option'));
+                    let foundOption = selectOptions.find(opt => opt.textContent.trim().toLowerCase() === name.trim().toLowerCase() && opt.getAttribute('data-unit') === unit);
+                    if (foundOption) {
+                        return {id: foundOption.value, name, unit};
+                    }
+                    // Если не найден — создать через API
+                    const response = await fetch('/api/ingredients/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify({name, measurement_unit: unit})
+                    });
+                    if (!response.ok) {
+                        // Если ошибка — ищем существующий option и возвращаем его id
+                        foundOption = selectOptions.find(opt => opt.textContent.trim().toLowerCase() === name.trim().toLowerCase() && opt.getAttribute('data-unit') === unit);
+                        if (foundOption) {
+                            return {id: foundOption.value, name, unit};
+                        }
+                        throw new Error('Ошибка создания ингредиента: ' + name);
+                    }
+                    const data = await response.json();
+                    // Добавить новый option во все select
+                    document.querySelectorAll('select[name="ingredient"]').forEach(select => {
+                        const option = document.createElement('option');
+                        option.value = data.id;
+                        option.textContent = data.name;
+                        option.setAttribute('data-unit', data.measurement_unit);
+                        select.appendChild(option);
+                    });
+                    return {id: data.id, name: data.name, unit: data.measurement_unit};
+                }
+
+                // Очищаем и добавляем ингредиенты
+                ingredientsContainer.innerHTML = '';
+                for (const ingredient of data.ingredients) {
+                    let unit = ingredient.unit || ingredient.measurement_unit;
+                    const ensured = await ensureIngredientExists(ingredient.name, unit);
+                    const ingredientItem = document.createElement('div');
+                    ingredientItem.className = 'ingredient-item mb-3';
+                    ingredientItem.innerHTML = `
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <select name="ingredient" class="form-control" required>
+                                    <option value="${ensured.id}" selected>${ensured.name}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <input type="number" name="amount" class="form-control" value="${ingredient.amount}" required min="0" step="any">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <input type="text" class="form-control unit-input" value="${ensured.unit || ''}" readonly>
+                            </div>
+                            <div class="col-12 col-md-1">
+                                <button type="button" class="btn btn-danger remove-ingredient">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    ingredientsContainer.appendChild(ingredientItem);
+                }
+
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                generateButton.disabled = false;
+                generateButton.innerHTML = '<i class="fas fa-magic"></i> Сгенерировать через AI';
+            }
+        });
+
+        document.getElementById('addIngredient').onclick = function() {
+            const ingredientItem = document.createElement('div');
+            ingredientItem.className = 'ingredient-item mb-3';
+            ingredientItem.innerHTML = `
+                <div class="row">
+                    <div class="col-12 col-md-5">
+                        <select name="ingredient" class="form-control" required>
+                            <option value="">Выберите ингредиент</option>
+                            {% for ingredient in ingredients %}
+                            <option value="{{ ingredient.id }}" data-unit="{{ ingredient.measurement_unit }}">{{ ingredient.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <input type="number" name="amount" class="form-control" placeholder="Количество" required min="0" step="any">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <input type="text" class="form-control unit-input" placeholder="" readonly>
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <button type="button" class="btn btn-danger remove-ingredient">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            ingredientsContainer.appendChild(ingredientItem);
+
+            // Автозаполнение единицы измерения
+            const select = ingredientItem.querySelector('select');
+            const unitInput = ingredientItem.querySelector('.unit-input');
+            select.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const unit = selectedOption.getAttribute('data-unit');
+                unitInput.value = unit;
+            });
+        };
+
+        ingredientsContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-ingredient')) {
+                e.target.closest('.ingredient-item').remove();
+            }
+        });
+
+        // Автозаполнение единицы измерения для уже существующих select
+        document.querySelectorAll('#ingredients select').forEach(function(select) {
+            const unitInput = select.closest('.row').querySelector('.unit-input');
+            select.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const unit = selectedOption.getAttribute('data-unit');
+                unitInput.value = unit;
+            });
+            if (select.value) {
+                const selectedOption = select.options[select.selectedIndex];
+                const unit = selectedOption.getAttribute('data-unit');
+                unitInput.value = unit;
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

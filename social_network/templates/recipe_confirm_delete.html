@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление рецепта{% endblock %}
+
+{% block content %}
+<div class="delete-confirm-page animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2 class="mb-0">Удаление рецепта</h2>
+                </div>
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <p class="lead">Вы уверены, что хотите удалить рецепт "{{ recipe.title }}"?</p>
+                    <p class="text-muted">Это действие нельзя будет отменить.</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                            <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-secondary">
+                                Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .delete-confirm-page {
+        padding: 20px;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 10px 10px 0 0 !important;
+        padding: 20px;
+    }
+
+    .btn {
+        font-weight: 500;
+        padding: 12px 20px;
+    }
+
+    @media (max-width: 768px) {
+        .delete-confirm-page {
+            padding: 10px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+        }
+    }
+</style>
+{% endblock %}
+{% endblock %} 

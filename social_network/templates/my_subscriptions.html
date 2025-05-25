@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои подписки{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center my-4">Мои подписки</h1>
+
+    {% if recipes %}
+    <div class="row">
+        {% for recipe in recipes %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <p class="card-text">Автор: {{ recipe.author.username }}</p>
+                    <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="my-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-info text-center">
+        У вас пока нет подписок. Найдите интересных авторов и подпишитесь на них!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .subscriptions-page {
+        padding: 20px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 15px;
+        margin-bottom: 5px;
+        background-color: var(--bg-color);
+        border-radius: 10px !important;
+        transition: all 0.3s;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+        transform: translateX(5px);
+    }
+
+    @media (max-width: 768px) {
+        .subscriptions-page {
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock %} 

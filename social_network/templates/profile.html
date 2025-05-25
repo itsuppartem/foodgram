@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-page animate__animated animate__fadeIn">
+    <div class="row">
+        <div class="col-12 col-md-4 mb-4">
+            <div class="card profile-card">
+                <div class="card-body text-center">
+                    <h2>{{ user.username }}</h2>
+                    <p class="text-muted">{{ user.email }}</p>
+                    {% if user.profile.bio %}
+                    <p>{{ user.profile.bio }}</p>
+                    {% endif %}
+
+                    {% if user.telegram_id %}
+                    <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                        <p class="text-muted mb-0">
+                            <i class="fab fa-telegram"></i> Telegram: {{ user.telegram_id }}
+                        </p>
+                        <form method="post" action="{% url 'profile' user.username %}" class="d-inline ms-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="telegram_id" value="{{ user.telegram_id }}">
+                            <div class="form-check form-switch d-inline-block align-middle">
+                                <input class="form-check-input" type="checkbox" id="telegram_notify"
+                                       name="telegram_notify" value="on" {% if user.telegram_notify %}checked{% endif %}
+                                       onchange="this.form.submit()">
+                                <label class="form-check-label" for="telegram_notify">Получать уведомления</label>
+                            </div>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="card mb-3 p-3" style="background: #f8f9fa; border-radius: 12px;">
+                        <h5 class="mb-2"><i class="fab fa-telegram"></i> Привязка Telegram</h5>
+                        <div class="telegram-steps mb-3">
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item">Найдите нашего бота: <a
+                                        href="https://t.me/Foodgram_classic_bot" target="_blank"
+                                        class="btn btn-sm btn-outline-primary ms-2">@Foodgram_classic_bot</a></li>
+                                <li class="list-group-item">Отправьте команду /start</li>
+                                <li class="list-group-item">Бот пришлет вам ваш Telegram ID</li>
+                                <li class="list-group-item">Скопируйте ID и вставьте в поле ниже</li>
+                            </ol>
+                        </div>
+                        <form method="post" action="{% url 'profile' user.username %}" class="telegram-form">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="telegram_id" class="form-label">Ваш Telegram ID</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fab fa-telegram"></i></span>
+                                    <input type="text" class="form-control" id="telegram_id" name="telegram_id"
+                                           placeholder="Например: 123456789" required>
+                                </div>
+                                <div class="form-text">Введите только цифры ID, без дополнительных символов</div>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="telegram_notify_new"
+                                       name="telegram_notify" value="on" {% if user.telegram_notify %}checked{% endif
+                                       %}>
+                                <label class="form-check-label" for="telegram_notify_new">Получать уведомления</label>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Сохранить
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    <div class="stats mt-3">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <i class="fas fa-users text-primary"></i>
+                                    <h5>{{ total_subscribers }}</h5>
+                                    <small>Подписчики</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <i class="fas fa-heart text-danger"></i>
+                                    <h5>{{ total_favorites }}</h5>
+                                    <small>Избранное</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <i class="fas fa-eye text-info"></i>
+                                    <h5>{{ total_views }}</h5>
+                                    <small>Просмотры</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if user == request.user %}
+                    <a href="{% url 'profile_edit' %}" class="btn btn-primary mt-3">
+                        <i class="fas fa-edit"></i> Редактировать профиль
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Рецепты пользователя</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for recipe in recipes %}
+                        <div class="col-12 col-sm-6 mb-4">
+                            <div class="card recipe-card h-100">
+                                {% if recipe.image %}
+                                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}"
+                                     style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ recipe.title }}</h5>
+                                    <p class="card-text text-muted">
+                                        <small>{{ recipe.created_at|date:"d.m.Y" }}</small>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-primary">{{ recipe.cooking_time }} мин</span>
+                                        </div>
+                                        <a href="{% url 'recipe_detail' recipe.id %}"
+                                           class="btn btn-primary">Подробнее</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center text-muted">У пользователя пока нет рецептов</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .profile-page {
+        padding: 20px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .profile-card img {
+        border: 3px solid var(--primary-color);
+        transition: all 0.3s;
+    }
+
+    .profile-card img:hover {
+        transform: scale(1.05);
+    }
+
+    .recipe-card {
+        transition: all 0.3s;
+    }
+
+    .recipe-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stats {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .stat-item i {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .stat-item h5 {
+        margin: 5px 0;
+        font-weight: bold;
+    }
+
+    .stat-item small {
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .profile-page {
+            padding: 10px;
+        }
+
+        .profile-card {
+            margin-bottom: 20px;
+        }
+
+        .profile-card img {
+            width: 120px !important;
+            height: 120px !important;
+        }
+
+        .stats {
+            padding: 10px;
+        }
+
+        .stat-item {
+            padding: 5px;
+        }
+    }
+</style>
+{% endblock %}
+{% endblock %} 
