@@ -26,7 +26,7 @@ jobs:
   build_and_push_to_docker_hub:
     name: Сборка и пуш в Docker Hub
     runs-on: ubuntu-latest
-    needs: pytest
+    needs: social_network_pytest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
