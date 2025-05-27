@@ -17,6 +17,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest
+          cd social_network
           pip install -r requirements.txt
       - name: Запуск pytest
         run: |
