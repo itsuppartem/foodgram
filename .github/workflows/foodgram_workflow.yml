@@ -6,6 +6,20 @@ jobs:
   social_network_pytest:
     name: Запуск pytest в социальной сети
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: foodgram_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -20,6 +34,14 @@ jobs:
           cd social_network
           pip install -r requirements.txt
       - name: Запуск pytest
+        env:
+          SECRET_KEY: 'django-insecure-test-key-for-github-actions'
+          DB_ENGINE: 'django.db.backends.postgresql'
+          DB_NAME: 'foodgram_test'
+          POSTGRES_USER: 'postgres'
+          POSTGRES_PASSWORD: 'postgres'
+          DB_HOST: 'localhost'
+          DB_PORT: '5432'
         run: |
           cd social_network
           pytest
