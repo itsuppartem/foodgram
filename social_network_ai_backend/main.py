@@ -13,7 +13,7 @@ from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 from sqlalchemy.orm import Session
 
-from .config import settings
+from config import settings
 from database import engine, Base, get_db
 from gemini_service import (generate_text, generate_image, generate_recipe, generate_recipes_by_ingredients,
                             generate_daily_recipe, generate_recipe_history, generate_drink_pairings,
