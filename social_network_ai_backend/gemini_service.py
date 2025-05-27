@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from sqlalchemy import or_, func
 from sqlalchemy.orm import Session
 
-from .config import settings
+from config import settings
 from models import RecipeResponse, GeneratedRecipe, RecipeByIngredientsRequest, RecipesResponse, \
     RecipeHistoryResponse, DrinkPairingResponse, ChefAdvice, SEODescription, TelegramPost, TelegramPostsResponse, \
     CleanedQuestion, Keywords, DietAdaptationRequest, IngredientReplacementRequest, \
