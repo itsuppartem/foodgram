@@ -1,0 +1,567 @@
+{
+	"info": {
+		"_postman_id": "7419a275-1f4f-4efb-8fb5-aa3c0d7d79bc",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19710032"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8001/generate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"prompt\": \"Привет, как дела?\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"generate"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/generate\" \\\n     -H \"X-API-Key: 123\" \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\"prompt\": \"Привет, как дела?\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/generate-by-text",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"prompt\": \"Рецепт пиццы маргарита\", \"cooking_time\": 30, \"difficulty\": \"средняя\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/generate-by-text",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"generate-by-text"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8001/api/v1/recipes/generate-by-text\" -H \"X-API-Key: 123\" -H \"Content-Type: application/json\" -d \"{\\\"prompt\\\": \\\"Рецепт пиццы маргарита\\\", \\\"cooking_time\\\": 30, \\\"difficulty\\\": \\\"средняя\\\"}\""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/generate-by-ingredients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ingredients\": [\r\n    {\r\n      \"name\": \"куриная грудка\",\r\n      \"amount\": 500,\r\n      \"unit\": \"г\"\r\n    },\r\n    {\r\n      \"name\": \"рис\",\r\n      \"amount\": 200,\r\n      \"unit\": \"г\"\r\n    },\r\n    {\r\n      \"name\": \"морковь\",\r\n      \"amount\": 2,\r\n      \"unit\": \"шт\"\r\n    }\r\n  ],\r\n  \"count\": 2,\r\n  \"cooking_time\": 30,\r\n  \"difficulty\": \"средняя\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/generate-by-ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"generate-by-ingredients"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8001/api/v1/recipes/generate-by-ingredients\" \\\r\n-H \"X-API-Key: 123\" \\\r\n-H \"Content-Type: application/json\" \\\r\n-d '{\r\n  \"ingredients\": [\r\n    {\r\n      \"name\": \"куриная грудка\",\r\n      \"amount\": 500,\r\n      \"unit\": \"г\"\r\n    },\r\n    {\r\n      \"name\": \"рис\",\r\n      \"amount\": 200,\r\n      \"unit\": \"г\"\r\n    },\r\n    {\r\n      \"name\": \"морковь\",\r\n      \"amount\": 2,\r\n      \"unit\": \"шт\"\r\n    }\r\n  ],\r\n  \"count\": 2,\r\n  \"cooking_time\": 30,\r\n  \"difficulty\": \"средняя\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/daily-themed?days_not_shown=7",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/daily-themed?days_not_shown=7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"daily-themed"
+					],
+					"query": [
+						{
+							"key": "days_not_shown",
+							"value": "7"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET \"http://localhost:8001/api/v1/recipes/daily-themed?days_not_shown=7\" \\\r\n-H \"X-API-Key: 123\""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/adapt",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"dietary_restrictions\": [\"вегетарианство\", \"без глютена\"],\n  \"additional_requirements\": \"Низкокалорийное блюдо\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/adapt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"adapt"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/adapt\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"dietary_restrictions\": [\"вегетарианство\", \"без глютена\"],\n  \"additional_requirements\": \"Низкокалорийное блюдо\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/replace-ingredients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"replacements\": [\n    {\n      \"original\": \"Куриная грудка\",\n      \"replacement\": \"Тофу\",\n      \"amount\": 400,\n      \"unit\": \"г\"\n    }\n  ],\n  \"additional_notes\": \"Сделать вегетарианскую версию\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/replace-ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"replace-ingredients"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/replace-ingredients\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"replacements\": [\n    {\n      \"original\": \"Куриная грудка\",\n      \"replacement\": \"Тофу\",\n      \"amount\": 400,\n      \"unit\": \"г\"\n    }\n  ],\n  \"additional_notes\": \"Сделать вегетарианскую версию\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/adjust-portions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"target_portions\": 6,\n  \"original_portions\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/adjust-portions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"adjust-portions"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/adjust-portions\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"target_portions\": 6,\n  \"original_portions\": 4\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/history",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"recipe\": {\r\n    \"name\": \"Куриная грудка с овощами\",\r\n    \"description\": \"Простое и полезное блюдо\",\r\n    \"ingredients\": [\r\n      {\r\n        \"name\": \"Куриная грудка\",\r\n        \"amount\": 500,\r\n        \"unit\": \"г\"\r\n      },\r\n      {\r\n        \"name\": \"Брокколи\",\r\n        \"amount\": 300,\r\n        \"unit\": \"г\"\r\n      }\r\n    ],\r\n    \"steps\": [\r\n      \"Нарезать куриную грудку\",\r\n      \"Обжарить до готовности\",\r\n      \"Добавить брокколи и тушить 10 минут\"\r\n    ],\r\n    \"cooking_time\": 30,\r\n    \"difficulty\": \"легко\",\r\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\r\n  },\r\n  \"additional_context\": \"Современное блюдо для здорового питания\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"history"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8001/api/v1/recipes/history\" \\\r\n-H \"Content-Type: application/json\" \\\r\n-H \"X-API-Key: 123\" \\\r\n-d '{\r\n  \"recipe\": {\r\n    \"name\": \"Куриная грудка с овощами\",\r\n    \"description\": \"Простое и полезное блюдо\",\r\n    \"ingredients\": [\r\n      {\r\n        \"name\": \"Куриная грудка\",\r\n        \"amount\": 500,\r\n        \"unit\": \"г\"\r\n      },\r\n      {\r\n        \"name\": \"Брокколи\",\r\n        \"amount\": 300,\r\n        \"unit\": \"г\"\r\n      }\r\n    ],\r\n    \"steps\": [\r\n      \"Нарезать куриную грудку\",\r\n      \"Обжарить до готовности\",\r\n      \"Добавить брокколи и тушить 10 минут\"\r\n    ],\r\n    \"cooking_time\": 30,\r\n    \"difficulty\": \"легко\",\r\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\r\n  },\r\n  \"additional_context\": \"Современное блюдо для здорового питания\"\r\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/drink-pairings",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Легкое блюдо для ужина\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/drink-pairings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"drink-pairings"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/drink-pairings\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Легкое блюдо для ужина\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/chef-advice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Для начинающих поваров\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/chef-advice",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"chef-advice"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/chef-advice\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Для начинающих поваров\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/seo-description",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Здоровое питание\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/seo-description",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"seo-description"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:8000/api/v1/recipes/seo-description\" \\\n-H \"Content-Type: application/json\" \\\n-H \"X-API-Key: 123\" \\\n-d '{\n  \"recipe\": {\n    \"name\": \"Куриная грудка с овощами\",\n    \"description\": \"Простое и полезное блюдо\",\n    \"ingredients\": [\n      {\n        \"name\": \"Куриная грудка\",\n        \"amount\": 500,\n        \"unit\": \"г\"\n      },\n      {\n        \"name\": \"Брокколи\",\n        \"amount\": 300,\n        \"unit\": \"г\"\n      }\n    ],\n    \"steps\": [\n      \"Нарезать куриную грудку\",\n      \"Обжарить до готовности\",\n      \"Добавить брокколи и тушить 10 минут\"\n    ],\n    \"cooking_time\": 30,\n    \"difficulty\": \"легко\",\n    \"image_generation_prompt\": \"Куриная грудка с брокколи на белой тарелке\"\n  },\n  \"additional_context\": \"Здоровое питание\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/ask",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"question\": \"Сколько времени готовится борщ?\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/ask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"ask"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/telegram/generate-posts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"count\": 2,\n  \"include_comments\": true,\n  \"include_recipes\": true,\n  \"max_length\": 2500,\n  \"email\": \"1@ya.ru\",\n  \"password\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/telegram/generate-posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"telegram",
+						"generate-posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8001/api/v1/recipes/generate-random",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"1@ya.ru\",\n  \"password\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/v1/recipes/generate-random",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"v1",
+						"recipes",
+						"generate-random"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
